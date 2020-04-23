@@ -15,7 +15,5 @@ object readJSON {
     df.show
 
    df.groupBy("age").count().show()
-
   }
-
 }
