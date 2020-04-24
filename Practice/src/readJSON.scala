@@ -5,9 +5,7 @@ import org.apache.spark.sql.SQLContext
 object readJSON {
   def main(args: Array[String]): Unit = {
 
-    val sc = SparkSession.builder()
-      .appName("DFExample")
-      .master("local").getOrCreate()
+    val sc = SparkSession.builder().appName("DFExample").master("local").getOrCreate()
 
     //Read the input file to a dataframe
 

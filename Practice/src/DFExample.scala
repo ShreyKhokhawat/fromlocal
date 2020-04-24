@@ -8,20 +8,24 @@ import org.apache.spark.sql.Row
 
 object DFExample {
 
-	Logger.getLogger("org").setLevel(Level.ERROR)
-	val conf = new SparkConf().setAppName("textfileReader").setMaster("local")
-	val sc = new SparkContext(conf)
-
-	val sqlContext = new SQLContext(sc)
 	def main (args:Array[String]): Unit = {
+			Logger.getLogger("org").setLevel(Level.ERROR)
+			val conf = new SparkConf().setAppName("textfileReader").setMaster("local")
+			val sc = new SparkContext(conf)
+
+			val sqlContext = new SQLContext(sc)
+
 			System.setProperty("hadoop.home.dir", "c:/hadoop/");
 			val squidString = sc.textFile("squid.txt")
 					val squidHeader = "time duration client_add result_code bytes req_method url user hierarchy_code type"
 
-					val schema = StructType(squidHeader.split(" ")
-							.map(fieldName => StructField(fieldName,StringType, true)))
-
+					/*Spark provides spark.sql.types.StructType class to define the structure of the DataFrame and 
+					 * It is a collection or list on StructField objects. By calling printSchema() method on the 
+					 * DataFrame, StructType columns are represents as “struct”.
+					 */
+					val schema = StructType(squidHeader.split(" ").map(fieldName => StructField(fieldName,StringType, true)))
 					val rowRDD = squidString.map(_.split(" ")).map(x => Row(x(0), x(1), x(2), x(3), x(4), x(5) , x(6) , x(7) , x(8), x(9)))
+
 					val squidDF = sqlContext.createDataFrame(rowRDD, schema)
 
 					squidDF.registerTempTable("squid")
